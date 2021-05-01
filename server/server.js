@@ -30,7 +30,7 @@ app.get('/api/v1/restaurants/:id', async (req,res)=>{
         res.status(200).json({
             status: 'success',
             data: {
-                restaurants: results.rows
+                restaurants: results.rows[0]
             }
         })
         
@@ -43,9 +43,12 @@ app.get('/api/v1/restaurants/:id', async (req,res)=>{
 app.post('/api/v1/restaurants', async (req,res)=>{
     try{
         const {name, location, price_range} = req.body
-        const result = await db.query('insert into restaurants (name, location, price_range) values( $1, $2, $3)', [name, location, price_range])
+        const result = await db.query('insert into restaurants (name, location, price_range) values( $1, $2, $3) returning *', [name, location, price_range])
         res.status(201).json({
-            status: 'success'
+            status: 'success',
+            data:{
+                restaurants: result.rows[0]
+            }
         })
     }
     catch(err){
@@ -57,9 +60,12 @@ app.put('/api/v1/restaurants/:id', async (req,res)=>{
     try{
         const id = req.params.id
         const {name, location, price_range} = req.body
-        const result = await db.query('update restaurants set name=$1, location=$2, price_range=$3 where id=$4', [name, location, price_range, id])
+        const result = await db.query('update restaurants set name=$1, location=$2, price_range=$3 where id=$4 returning *', [name, location, price_range, id])
         res.status(201).json({
-            status: 'success'
+            status: 'success',
+            data:{
+                restaurant: result.rows[0]
+            }
         })
     }
     catch(err){
