@@ -1,9 +1,11 @@
 import React, {useEffect, useContext} from 'react'
 import restaurantFinder from '../apis/restaurantFinder'
 import {RestaurantsContext} from '../context/RestaurantsContext'
+import {useHistory} from 'react-router-dom'
 
 const RestaurantList = (props) =>{
     const {restaurants, setRestaurants } = useContext(RestaurantsContext)
+    let history = useHistory()
 
 
     useEffect( ()=>{
@@ -19,7 +21,26 @@ const RestaurantList = (props) =>{
         }
 
         fetchData()
-    },[])
+    },[restaurants, setRestaurants])
+
+
+    const deleteHandler = async(id) =>{
+        try{
+            await restaurantFinder.delete(`/${id}`)
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+
+    const handleUpdate = (id) =>{
+        try{
+            history.push(`/restaurants/${id}/update`)
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
 
     return(
         <div>
@@ -42,8 +63,8 @@ const RestaurantList = (props) =>{
                             <td>{rest.location}</td>
                             <td>{"$".repeat(rest.price_range)}</td>
                             <td>reviews</td>
-                            <td><button>Edit</button></td>
-                            <td><button>Delete</button></td>
+                            <td><button onClick={()=>handleUpdate(rest.id)}>Edit</button></td>
+                            <td><button onClick={()=>deleteHandler(rest.id)}> Delete</button></td>
                         </tr>
                     )
                     })}
