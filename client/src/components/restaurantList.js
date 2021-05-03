@@ -42,6 +42,15 @@ const RestaurantList = (props) =>{
         }
     }
 
+    const handleRestaurantClick = (id) =>{
+        try{
+            history.push(`/restaurants/${id}`)
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+
     return(
         <div>
             <table>
@@ -58,7 +67,7 @@ const RestaurantList = (props) =>{
                 <tbody>
     
                     {restaurants && restaurants.map(rest => {return(
-                        <tr key={rest.id}>
+                        <tr key={rest.id} onClick={() => handleRestaurantClick(rest.id)}>
                             <td>{rest.name}</td>
                             <td>{rest.location}</td>
                             <td>{"$".repeat(rest.price_range)}</td>
