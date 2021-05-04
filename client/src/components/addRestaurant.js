@@ -19,6 +19,11 @@ const AddRestaurant = () =>{
     const submitHandler = async (e) =>{
         e.preventDefault()
         await restaurantFinder.post('/', payload)
+        setPayload({
+            name:'',
+            location:'',
+            price_range: 'Price Range' 
+        })
     }
 
 

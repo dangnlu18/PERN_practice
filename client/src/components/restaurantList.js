@@ -24,7 +24,8 @@ const RestaurantList = (props) =>{
     },[restaurants, setRestaurants])
 
 
-    const deleteHandler = async(id) =>{
+    const deleteHandler = async(e,id) =>{
+        e.stopPropagation()
         try{
             await restaurantFinder.delete(`/${id}`)
         }
@@ -33,7 +34,8 @@ const RestaurantList = (props) =>{
         }
     }
 
-    const handleUpdate = (id) =>{
+    const handleUpdate = (e, id) =>{
+        e.stopPropagation()
         try{
             history.push(`/restaurants/${id}/update`)
         }
@@ -72,8 +74,8 @@ const RestaurantList = (props) =>{
                             <td>{rest.location}</td>
                             <td>{"$".repeat(rest.price_range)}</td>
                             <td>reviews</td>
-                            <td><button onClick={()=>handleUpdate(rest.id)}>Edit</button></td>
-                            <td><button onClick={()=>deleteHandler(rest.id)}> Delete</button></td>
+                            <td><button onClick={(e)=>handleUpdate(e, rest.id)}>Update</button></td>
+                            <td><button onClick={(e)=>deleteHandler(e, rest.id)}> Delete</button></td>
                         </tr>
                     )
                     })}
